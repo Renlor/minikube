@@ -90,6 +90,23 @@ See https://linux.die.net/man/5/resolver
 
 ## Linux OS with Network Manager
 
+Check if systemd-resolved is managing name resolution 
+
+```bash
+readlink /etc/resolv.conf | grep -q 'systemd' && echo "Systemd Managed" || echo "Not Managed"
+Systemd Managed
+systemctl status systemd-resolved
+running
+```
+
+Switch to NetworkManager managed resolv.conf
+
+```bash
+systemctl disable --now systemd-resolved
+rm -f /etc/resolv.conf
+systemctl restart NetworkManager
+```
+
 Network Manager can run integrated caching DNS server - `dnsmasq` plugin and can be configured to use separate nameservers per domain. 
 
 Edit /etc/NetworkManager/NetworkManager.conf and set `dns=dnsmasq`
